@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/speech_to_text.css') }}">
+</head>
+<body>
+    <h1>Speech to Text</h1>
+    <button onclick="startRecognition(this)">Start Speech Recognition</button>
+
+    <p id="recognized-text"></p>
+
+    <script>
+        function startRecognition(button) {
+            const resultText = document.getElementById("recognized-text");
+
+            // Update the button text and disable it
+            button.innerText = "Listening...";
+            button.disabled = true;
+
+            fetch("/recognize", { method: "POST" })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        resultText.innerText = "Recognized Text: " + data.text;
+                    } else {
+                        resultText.innerText = "Error: " + data.error;
+                    }
+                })
+                .catch(error => {
+                    resultText.innerText = "An error occurred: " + error;
+                })
+                .finally(() => {
+                    button.innerText = "Start Speech Recognition";
+                    button.disabled = false;
+                });
+        }
+    </script>
+
+
+    <br><br>
+    <a href="{{ url_for('index') }}">Back to Text Summarization</a>
+</body>
+</html>

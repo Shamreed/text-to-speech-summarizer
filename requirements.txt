@@ -1,0 +1,6 @@
+transformers
+torch
+gtts
+flask
+SpeechRecognition
+PyAudio
